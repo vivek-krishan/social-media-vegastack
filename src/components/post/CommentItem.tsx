@@ -1,5 +1,4 @@
 import React from "react";
-import { Heart } from "lucide-react";
 import { IComment } from "@/models/comment.model";
 import { getWeeksSince } from "@/lib/utils";
 
