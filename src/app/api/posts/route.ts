@@ -6,12 +6,10 @@ import { authOptions } from "../auth/[...nextauth]/option";
 import mongoose from "mongoose";
 import { UploadImages } from "@/helpers/imageKit";
 import formidable from "formidable";
-import fs from "fs";
 import ApiResponse from "@/helpers/ApiResponse";
 import { NextRequest } from "next/server";
 import { toNodeStream } from "@/lib/utils";
 import UserModel, { IUser } from "@/models/user.model";
-import CommentModel from "@/models/comment.model";
 
 // Required for formidable in Next.js API routes
 export const config = {

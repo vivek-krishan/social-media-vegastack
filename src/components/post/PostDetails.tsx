@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Heart,
   MessageCircle,
-  Bookmark,
   MoreHorizontal,
-  Send,
   Smile,
 } from "lucide-react";
 import { IPost } from "@/models/post.model";
@@ -14,8 +12,6 @@ import CommentItem from "./CommentItem";
 import { IComment } from "@/models/comment.model";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { createPostSchema } from "@/schemas/createPost.schema";
-import { getWeeksSince } from "@/lib/utils";
 
 import { commentSchema } from "@/schemas/comment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";

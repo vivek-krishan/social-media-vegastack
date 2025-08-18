@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import "next-auth";
 import { DefaultSession } from "next-auth";
 

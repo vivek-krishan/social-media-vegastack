@@ -1,4 +1,3 @@
-import CommentModel from "@/models/comment.model";
 import dbConnect from "@/lib/dbConnection";
 import { getServerSession, User } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/option";

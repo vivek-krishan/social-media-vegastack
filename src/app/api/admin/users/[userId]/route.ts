@@ -2,7 +2,6 @@ import dbConnect from "@/lib/dbConnection";
 import UserModel, { IUser } from "@/models/user.model";
 import { getServerSession, User } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/option";
-import mongoose from "mongoose";
 import ApiError from "@/helpers/ApiError";
 import ApiResponse from "@/helpers/ApiResponse";
 

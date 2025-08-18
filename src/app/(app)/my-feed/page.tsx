@@ -15,7 +15,8 @@ const MyFeed = () => {
     commentLoading: false,
     likeLoading: false,
   });
-
+  
+  console.log(loader);
   const [feedData, setFeedData] = useState<IPost[]>([]);
 
   const fetchFeed = async () => {
@@ -55,7 +56,7 @@ const MyFeed = () => {
               likes: post.likes.length,
               isLiked: post.isLiked,
               comments: post.comments.length,
-              allComments: post.comments as IComment[]
+              allComments: post.comments as IComment[],
             }}
             postId={post._id}
           />

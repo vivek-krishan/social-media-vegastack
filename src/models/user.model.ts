@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema } from "mongoose";
-import PostModel from "./post.model";
 
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;

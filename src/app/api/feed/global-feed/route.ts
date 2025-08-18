@@ -3,8 +3,6 @@ import { getServerSession, User } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/option";
 import ApiError from "@/helpers/ApiError";
 import PostModel from "@/models/post.model";
-import CommentModel from "@/models/comment.model";
-import UserModel from "@/models/user.model";
 import ApiResponse from "@/helpers/ApiResponse";
 import mongoose from "mongoose";
 

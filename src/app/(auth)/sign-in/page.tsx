@@ -18,24 +18,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { EyeClosed, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { signInSchema } from "@/schemas/signIn.schema";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Eye } from "lucide-react";
 import { PLATFORM_NAME } from "@/helpers/constants";
 
 const SignInPage = () => {
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   // Zod implementation

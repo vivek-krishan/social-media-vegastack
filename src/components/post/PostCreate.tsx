@@ -41,7 +41,6 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
   });
 
   // Watch image field for preview
-  const selectedImage = watch("image");
 
   const onSubmit = async (data: CreatePostFormValues) => {
 

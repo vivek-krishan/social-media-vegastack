@@ -1,6 +1,5 @@
 import ApiError from "@/helpers/ApiError";
 import dbConnect from "@/lib/dbConnection";
-import CommentModel from "@/models/comment.model";
 import PostModel, { IPost } from "@/models/post.model";
 import UserModel, { IUser } from "@/models/user.model";
 import { getServerSession, User } from "next-auth";

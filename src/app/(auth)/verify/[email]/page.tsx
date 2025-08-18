@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
 import { verifySchema } from "@/schemas/verifyCode.schema";
 
-const verifyUser = () => {
+const VerifyUser = () => {
   const router = useRouter();
   const params = useParams<{ email: string }>();
   const [loading, setLoading] = useState(false);
@@ -99,4 +99,4 @@ const verifyUser = () => {
   );
 };
 
-export default verifyUser;
+export default VerifyUser;

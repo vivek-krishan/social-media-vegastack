@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
-import PostCreate from "@/components/post/PostCreate";
 import PostCard from "@/components/post/PostCard";
 import { IPost } from "@/models/post.model";
 import axios from "axios";
@@ -16,6 +15,7 @@ const GlobalFeed = () => {
     likeLoading: false,
   });
 
+  console.log(loader);
   const [feedData, setFeedData] = useState<IPost[]>([]);
 
   const fetchFeed = async () => {

@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnection";
 import UserModel from "@/models/user.model";
 import { z, ZodFormattedError } from "zod";
-import { NextResponse } from "next/server";
 import ApiError from "@/helpers/ApiError";
 import ApiResponse from "@/helpers/ApiResponse";
 import { changePasswordSchema } from "@/schemas/changePassword.schema";

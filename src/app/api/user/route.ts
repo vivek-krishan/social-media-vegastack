@@ -5,7 +5,6 @@ import UserModel, { IUser } from "@/models/user.model";
 import { getServerSession, User } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/option";
 import mongoose from "mongoose";
-import PostModel from "@/models/post.model";
 
 // Get method for fetching user data by userId
 export async function GET(req: Request) {

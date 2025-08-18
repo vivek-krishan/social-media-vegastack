@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileActions from "@/components/profile/ProfileActions";
 import ProfileInfo from "@/components/profile/ProfileInfo";
 import ContentTabs from "@/components/profile/ContentTabs";
@@ -21,13 +20,14 @@ const ProfilePage = () => {
     toggleFollowing: false,
   });
 
+  console.log(loader);
   const { data: session } = useSession();
 
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const [user, setUser] = useState<IUser | null>(null);
-  const [isFollowing, setIsFollowing] = useState<Boolean>(false);
-  const [hasFollowed, setHasFollowed] = useState<Boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [hasFollowed, setHasFollowed] = useState<boolean>(false);
 
   const fetchProfile = async () => {
     setLoader((prev) => ({ ...prev, fetingProfile: true }));
@@ -51,7 +51,7 @@ const ProfilePage = () => {
     setLoader((prev) => ({ ...prev, toggleFollowing: true }));
 
     try {
-      const response = axios.patch("/api/user/follow", {
+      axios.patch("/api/user/follow", {
         targetId: userId,
         following: !isFollowing,
       });
