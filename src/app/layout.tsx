@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Layout from "@/components/layout/Layout";
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
-import { Toaster } from "sonner";
+import { Toaster as INT } from "sonner"; // Internal notification
+import { Toaster as ENT } from "react-hot-toast"; // External notification
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang='en'>
       <AuthProvider>
@@ -32,7 +34,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#1E1F25] text-white min-h-screen w-full`}
         >
           {children}
-          <Toaster richColors expand={true} />
+          <INT richColors expand={true} />
+          <ENT position='top-right' toastOptions={{ duration: 5000 }} />
         </body>
       </AuthProvider>
     </html>

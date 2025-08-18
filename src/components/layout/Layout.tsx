@@ -1,11 +1,14 @@
+'use client'
 import React, { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import RightSidebar from "./RightSidebar";
+import { useSocket } from "@/hooks/useSocket";
 interface LayoutProps {
   children: ReactNode;
 }
 const Layout = ({ children }: LayoutProps) => {
+  useSocket();
   return (
     <div className='flex h-screen overflow-hidden'>
       <Sidebar />

@@ -7,6 +7,7 @@ import { commentSchema } from "@/schemas/comment.schema";
 import CommentModel, { IComment } from "@/models/comment.model";
 import PostModel from "@/models/post.model";
 import ApiResponse from "@/helpers/ApiResponse";
+import { getIO } from "@/lib/socket";
 
 // post request for creating a new comment on any post
 export async function POST(req: Request) {
@@ -58,6 +59,20 @@ export async function POST(req: Request) {
     //    Update the post with the new comment
     post.comments.push(newComment._id);
     await post.save();
+
+    const io = getIO(); // From src/lib/socket.ts
+
+    const postOwnerId = post.user._id.toString();
+    const commenterId = sessionUser._id;
+
+    if (postOwnerId !== commenterId) {
+      io.to(postOwnerId).emit("notification", {
+        type: "comment",
+        postId: post._id.toString(),
+        userId: commenterId,
+        message: "Someone commented on your post!",
+      });
+    }
 
     return ApiResponse<IComment>(
       200,

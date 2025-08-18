@@ -5,6 +5,7 @@ import ApiError from "@/helpers/ApiError";
 import mongoose from "mongoose";
 import PostModel from "@/models/post.model";
 import ApiResponse from "@/helpers/ApiResponse";
+import { getIO } from "@/lib/socket";
 
 // patch controller for toggling post likes
 export async function PATCH(req: Request) {
@@ -29,7 +30,7 @@ export async function PATCH(req: Request) {
 
     // Check if the post exists
     const post = await PostModel.findById(postId);
-     
+
     if (!post) return ApiError(404, false, "Post not found");
 
     // Check if the user has already liked the post
@@ -47,6 +48,19 @@ export async function PATCH(req: Request) {
       post.likes.push(userId);
     }
     post.save();
+
+    // Socket Implementation
+    const io = await getIO(); // Now async
+    const postOwnerId = post.user.toString();
+    const likerId = sessionUser._id;
+    if (postOwnerId !== likerId) {
+      io.to(postOwnerId).emit("notification", {
+        type: "like",
+        postId: post._id.toString(),
+        userId: likerId,
+        message: "Someone liked your post!",
+      });
+    }
 
     return ApiResponse(200, true, "Post like toggled successfully", {
       post,
