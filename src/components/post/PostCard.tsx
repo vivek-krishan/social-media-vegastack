@@ -1,8 +1,8 @@
+"use client";
 import React, { useState } from "react";
 import { ThumbsUp, MessageSquare, Bookmark, Send } from "lucide-react";
 import axios from "axios";
 import CommentItem from "./CommentItem";
-import { IComment } from "@/models/comment.model";
 
 interface PostCardProps {
   user: {
@@ -72,7 +72,7 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
       });
       setComments((prev) => prev + 1); // Update comment count
       setCommentText(""); // Clear input
-      // setShowCommentInput(false); 
+      // setShowCommentInput(false);
     } catch (error) {
       console.error("Error in commenting:", error);
     } finally {

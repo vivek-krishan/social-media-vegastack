@@ -1,5 +1,4 @@
 import React from "react";
-import { Settings } from "lucide-react";
 interface ProfileHeaderProps {
   avatar: string;
   username: string;
