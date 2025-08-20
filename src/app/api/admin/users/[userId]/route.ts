@@ -8,7 +8,6 @@ import ApiResponse from "@/helpers/ApiResponse";
 // Get function for fetching single user details(admin only)
 export async function GET(
   req: Request,
-  context: { params: { userId: string } }
 ) {
   await dbConnect();
 

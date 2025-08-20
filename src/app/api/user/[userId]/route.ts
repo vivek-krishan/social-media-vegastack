@@ -16,6 +16,9 @@ export async function GET(
   if (req) {
     // This is just to ensure the function is called in a server context
   }
+  if (!context) {
+    return ApiError(400, false, "userId is required");
+  }
 
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {

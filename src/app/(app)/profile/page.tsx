@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ProfileActions from "@/components/profile/ProfileActions";
 import ProfileInfo from "@/components/profile/ProfileInfo";
 import ContentTabs from "@/components/profile/ContentTabs";
@@ -48,7 +48,7 @@ const ProfilePage = () => {
     }
   };
 
-  const followToUser = async () => {
+  const followToUser = useCallback(async () => {
     setLoader((prev) => ({ ...prev, toggleFollowing: true }));
 
     try {
@@ -63,7 +63,7 @@ const ProfilePage = () => {
     } finally {
       setLoader((prev) => ({ ...prev, toggleFollowing: false }));
     }
-  };
+  }, [userId, isFollowing]);
 
   useEffect(() => {
     fetchProfile();
@@ -72,7 +72,7 @@ const ProfilePage = () => {
   return !session?.user ? (
     <div className='w-screen h-screen flex justify-center items-center'>
       {/* <img src='/screenLoading.svg' alt='' className='w-40' /> */}
-      <Image src={"/screenLoading.svg"} alt="Loading..." className='w-40' />
+      <Image src={"/screenLoading.svg"} alt='Loading...' className='w-40' />
     </div>
   ) : (
     <Layout>

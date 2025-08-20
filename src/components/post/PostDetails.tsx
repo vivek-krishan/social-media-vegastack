@@ -1,11 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  Heart,
-  MessageCircle,
-  MoreHorizontal,
-  Smile,
-} from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
+import { Heart, MessageCircle, MoreHorizontal, Smile } from "lucide-react";
 import { IPost } from "@/models/post.model";
 import axios from "axios";
 import CommentItem from "./CommentItem";
@@ -68,7 +63,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
     }
   };
 
-  const fetchPostDetails = async () => {
+  const fetchPostDetails = useCallback(async () => {
     setLoader((prev) => ({ ...prev, fetchingPost: true }));
     try {
       const postDetails = await axios.get(`/api/posts/${post._id}`);
@@ -80,7 +75,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
     } finally {
       setLoader((prev) => ({ ...prev, fetchingPost: false }));
     }
-  };
+  }, [post._id]);
 
   useEffect(() => {
     fetchPostDetails();
