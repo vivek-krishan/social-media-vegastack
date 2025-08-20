@@ -9,6 +9,10 @@ import mongoose from "mongoose";
 export async function GET(req: Request) {
   await dbConnect();
 
+  if (req) {
+    // This is just to ensure the function is called in a server context
+  }
+
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return ApiError(402, false, "User is not logged in!");

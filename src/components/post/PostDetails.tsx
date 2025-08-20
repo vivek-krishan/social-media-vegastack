@@ -17,6 +17,7 @@ import { commentSchema } from "@/schemas/comment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import Image from "next/image";
 
 interface PostDetailProps {
   post: IPost;
@@ -27,7 +28,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
     fetchingPost: false,
     commenting: false,
   });
-  const [hasLiked, setHasLiked] = useState<Boolean>(false);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [allComments, setAllComments] = useState<IComment[]>([]);
   const [postData, setPostData] = useState<IPost | null>(null);
 
@@ -83,18 +84,18 @@ const PostDetail = ({ post }: PostDetailProps) => {
 
   useEffect(() => {
     fetchPostDetails();
-  }, [post]);
+  }, [post, fetchPostDetails]);
 
   return loader.fetchingPost ? (
     <div>
-      <img src='/screenLoading.svg' alt='' className='w-40' />
+      <Image src='/screenLoading.svg' alt='' className='w-40' />
     </div>
   ) : (
     <div className='max-w-4xl max-h-[80vh] mx-auto flex flex-col md:flex-row rounded-xl overflow-hidden bg-gray-900'>
       {/* Left side - Image */}
       <div className='md:w-fit bg-black'>
-        <img
-          src={postData?.image.url}
+        <Image
+          src={postData?.image.url as string}
           alt={`Post by ${postData?.user?.name}`}
           className='h-full object-cover'
         />

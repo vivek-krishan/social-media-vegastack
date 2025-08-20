@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { ThumbsUp, MessageSquare, Bookmark, Send } from "lucide-react";
 import axios from "axios";
 import CommentItem from "./CommentItem";
-import { IComment } from "@/models/comment.model";
+import { toast } from "sonner";
+import { ApiResponseInterface } from "@/types/ApiResponse";
+import Image from "next/image";
 
 interface PostCardProps {
   user: {
@@ -41,7 +43,12 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
     setIsLiked(!isLiked);
 
     try {
-      const response = await axios.patch("/api/posts/like", { postId });
+      const response = await axios.patch<ApiResponseInterface>(
+        "/api/posts/like",
+        { postId }
+      );
+
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error in liking post:", error);
       // Revert optimistic update on error
@@ -67,10 +74,15 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
     engagement.allComments.push(comment);
 
     try {
-      const response = await axios.post("/api/posts/comment", {
-        postId,
-        comment: commentText,
-      });
+      const response = await axios.post<ApiResponseInterface>(
+        "/api/posts/comment",
+        {
+          postId,
+          comment: commentText,
+        }
+      );
+
+      toast.success(response.data.message);
       setComments((prev) => prev + 1); // Update comment count
       setCommentText(""); // Clear input
       // setShowCommentInput(false);
@@ -108,7 +120,7 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
           <p className='text-sm text-gray-200 mb-3'>{content.text}</p>
           {content.image && (
             <div className='rounded-lg overflow-hidden'>
-              <img src={content.image} alt='Post' className='w-full' />
+              <Image src={content.image} alt='Post' className='w-full' />
             </div>
           )}
         </div>
@@ -119,7 +131,7 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
             disabled={loader.isLiking}
           >
             {loader.isLiking ? (
-              <img
+              <Image
                 src='/like.gif' // Replace with your GIF path or URL
                 alt='Liking...'
                 className='w-5 h-5 mr-1'

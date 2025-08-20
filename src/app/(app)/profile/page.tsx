@@ -12,6 +12,7 @@ import Layout from "@/components/layout/Layout";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const ProfilePage = () => {
   const [loader, setLoader] = useState({
@@ -66,11 +67,12 @@ const ProfilePage = () => {
 
   useEffect(() => {
     fetchProfile();
-  }, [userId]);
+  }, [userId, fetchProfile]);
 
   return !session?.user ? (
     <div className='w-screen h-screen flex justify-center items-center'>
-      <img src='/screenLoading.svg' alt='' className='w-40' />
+      {/* <img src='/screenLoading.svg' alt='' className='w-40' /> */}
+      <Image src={"/screenLoading.svg"} alt="Loading..." className='w-40' />
     </div>
   ) : (
     <Layout>

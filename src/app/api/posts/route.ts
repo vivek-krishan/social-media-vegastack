@@ -10,7 +10,6 @@ import ApiResponse from "@/helpers/ApiResponse";
 import { NextRequest } from "next/server";
 import { toNodeStream } from "@/lib/utils";
 import UserModel, { IUser } from "@/models/user.model";
-import Stream from "stream";
 
 // Required for formidable in Next.js API routes
 export const config = {

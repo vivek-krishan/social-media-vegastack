@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 interface ProfileHeaderProps {
   avatar: string;
@@ -8,7 +9,7 @@ const ProfileHeader = ({ avatar, username }: ProfileHeaderProps) => {
     <div className='w-full flex justify-center items-center'>
       <div className='relative'>
         <div className='w-24 h-24 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 flex items-center justify-center'>
-          <img
+          <Image
             src={avatar}
             alt={username}
             className='w-[90%] h-[90%] rounded-full object-cover border-2 border-black'

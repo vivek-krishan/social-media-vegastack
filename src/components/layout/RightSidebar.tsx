@@ -67,41 +67,4 @@ const TrendingItem = ({
   );
 };
 
-interface SocialIconProps {
-  icon: string;
-  color: string;
-}
-const SocialIcon = ({ icon, color }: SocialIconProps) => {
-  return (
-    <div
-      className={`w-10 h-10 rounded-full ${color} flex items-center justify-center`}
-    >
-      <span className='text-white'>{icon.charAt(0).toUpperCase()}</span>
-    </div>
-  );
-};
-
-interface FriendItemProps {
-  name: string;
-  status: string;
-  image: string;
-  online?: boolean;
-}
-const FriendItem = ({ name, status, image, online }: FriendItemProps) => {
-  return (
-    <div className='flex items-center'>
-      <div className='relative mr-3'>
-        <img src={image} alt={name} className='w-8 h-8 rounded-full' />
-        {online && (
-          <span className='absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-[#1A1B21]'></span>
-        )}
-      </div>
-      <div className='flex-1'>
-        <p className='text-sm'>{name}</p>
-        <p className='text-xs text-gray-400'>{status}</p>
-      </div>
-      <div className='text-xs text-gray-500'>{online ? "12" : ""}</div>
-    </div>
-  );
-};
 export default RightSidebar;

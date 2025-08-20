@@ -3,6 +3,7 @@ import { IPost } from "@/models/post.model";
 import React, { useState } from "react";
 import PopUp from "../ui/PopUp";
 import PostDetail from "./PostDetails";
+import Image from "next/image";
 
 interface PostItemProps {
   post: IPost;
@@ -13,7 +14,7 @@ const PostItem = ({ post }: PostItemProps) => {
   return (
     <>
       <div className='aspect-square' onClick={() => setIsPreviewOpen(true)}>
-        <img
+        <Image
           src={post?.image?.url}
           alt={`Post ${post.id}`}
           className='w-full h-full object-cover'

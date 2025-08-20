@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { Awaitable, NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import UserModel from "@/models/user.model";
@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(
         credentials: Record<"identifier" | "password", string> | undefined
-      ): Promise<any> {
+      ): Promise<User | null> {
         await dbConnect();
 
         try {
@@ -37,10 +37,17 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
 
-          if (isPasswordCorrect) return user;
-          else throw new Error("Incorrect password");
-        } catch (err: any) {
-          throw new Error(err);
+          if (isPasswordCorrect) {
+            const plainUser = {
+              ...user.toObject(),
+              _id: user._id.toString(),
+            };
+            return plainUser as User;
+          } else throw new Error("Incorrect password");
+        } catch (err: Error | unknown) {
+          throw new Error(
+            err instanceof Error ? err.message : "An error occurred"
+          );
         }
       },
     }),

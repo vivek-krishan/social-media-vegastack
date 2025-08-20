@@ -1,26 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { Image, X } from "lucide-react";
+import { ImageUp, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
+import Image from "next/image";
 import { createPostSchema } from "@/schemas/createPost.schema";
 import axios from "axios";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { User } from "next-auth";
+import { Button } from "../ui/button";
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;
 
-interface PostCreateProps {
-  onSubmitPost?: (data: CreatePostFormValues) => void; // optional callback
-}
-
-const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
+const PostCreate = () => {
   const [preview, setPreview] = useState<string | null>(null);
-  const [loader, setLoader] = useState(false);
 
   const { data: session } = useSession();
   const user: User = session?.user as User;
@@ -30,7 +26,6 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
-    watch,
     reset,
   } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
@@ -43,20 +38,16 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
   // Watch image field for preview
 
   const onSubmit = async (data: CreatePostFormValues) => {
-
-    setLoader(true);
     try {
       const formData = new FormData();
       formData.append("caption", data.caption);
       formData.append("image", data.image as File);
 
-      const post = await axios.post("/api/posts/", formData);
+      await axios.post("/api/posts/", formData);
       toast.success("Image Posted");
     } catch (error) {
       console.log("Error in posting the post:", error);
       toast.error("Error in posting image!");
-    } finally {
-      setLoader(false);
     }
 
     reset();
@@ -97,7 +88,7 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
               htmlFor='postImageInput'
               className='flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white text-sm'
             >
-              <Image size={18} /> Upload Image
+              <ImageUp size={18} />
             </label>
 
             {/* Hidden file input */}
@@ -123,7 +114,7 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
                   className='self-end cursor-pointer'
                   onClick={() => setPreview(null)}
                 />
-                <img
+                <Image
                   src={preview}
                   alt='Preview'
                   className='max-h-40 w-fit rounded-md border border-gray-700'
@@ -135,13 +126,13 @@ const PostCreate = ({ onSubmitPost }: PostCreateProps) => {
           {/* Actions */}
           <div className='flex items-center justify-between mt-4'>
             <div className='flex space-x-2'>
-              <button
+              <Button
                 type='submit'
                 disabled={isSubmitting}
                 className='text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md'
               >
                 {isSubmitting ? "Posting..." : "Post"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

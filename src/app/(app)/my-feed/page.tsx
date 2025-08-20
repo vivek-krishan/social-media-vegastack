@@ -43,6 +43,7 @@ const MyFeed = () => {
         <PostCreate />
         {feedData.map((post) => (
           <PostCard
+          key={post._id}
             user={{
               name: post.user?.name,
               image: "https://randomuser.me/api/portraits/men/36.jpg",
