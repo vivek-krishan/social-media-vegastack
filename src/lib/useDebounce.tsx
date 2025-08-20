@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-export const useDebounce = <T extends (...args: any[]) => any>(
+export const useDebounce = <
+  T extends (...args: Parameters<T>) => ReturnType<T>,
+>(
   callback: T,
   delay: number
 ) => {
@@ -15,7 +17,7 @@ export const useDebounce = <T extends (...args: any[]) => any>(
     };
   }, []);
 
-  return (...args: Parameters<T>) => {
+  return (...args: Parameters<T>): void => {
     if (timerRef.current) {
       clearTimeout(timerRef.current); // Reset timer on new call
     }

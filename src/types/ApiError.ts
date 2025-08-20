@@ -6,6 +6,6 @@ export interface ApiErrorInterface {
     errors?: {
         [key: string]: string[];
     };
-    data?: any;
+    data?: unknown;
     stack?: string;
 }

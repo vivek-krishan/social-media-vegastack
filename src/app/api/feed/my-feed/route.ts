@@ -116,8 +116,8 @@ export async function GET(req: Request) {
       totalPosts,
       totalPages: Math.ceil(totalPosts / limit),
     });
-  } catch (error: any) {
-    console.error("Error in fetching the data:", error.message, error.stack);
+  } catch (error: unknown) {
+    console.error("Error in fetching the data:", error);
     return ApiError(500, false, "Internal server error");
   }
 }

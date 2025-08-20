@@ -1,6 +1,6 @@
 import ImageKit from "imagekit";
 import fs from "fs/promises";
-import fsSync from "fs"; // for createReadStream
+import fsSync from "fs";
 
 const imageKit = new ImageKit({
   publicKey: process.env.imageKit_Public_Key as string,
@@ -15,7 +15,15 @@ interface FolderDetails {
 interface UploadedImg {
   fileId: string;
   url: string;
-  [key: string]: any;
+  name: string;
+  size: number;
+  filePath: string;
+  tags?: string[];
+  isPrivateFile: boolean;
+  fileType: string;
+  width?: number;
+  height?: number;
+  thumbnailUrl?: string;
 }
 
 export const UploadImages = async (
@@ -25,11 +33,10 @@ export const UploadImages = async (
   tags: string[] = []
 ): Promise<UploadedImg> => {
   try {
-    // ✅ FIX: Use file stream instead of raw filepath
     const fileStream = fsSync.createReadStream(filepath);
 
     const uploadedImg = await imageKit.upload({
-      file: fileStream, // ✅ stream instead of filepath string
+      file: fileStream,
       fileName: name,
       tags,
       folder: folderDetails.folderStructure,
@@ -37,14 +44,18 @@ export const UploadImages = async (
       useUniqueFileName: false,
     });
 
-    if (!uploadedImg) throw new Error("Image uploading failed from imageKit");
+    if (!uploadedImg) {
+      throw new Error("Image uploading failed from ImageKit");
+    }
 
     await fs.unlink(filepath); // Clean up tmp file
 
     return uploadedImg as UploadedImg;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in UploadImages:", error);
-    throw error;
+    const message =
+      error instanceof Error ? error.message : "Image upload failed";
+    throw new Error(message);
   }
 };
 

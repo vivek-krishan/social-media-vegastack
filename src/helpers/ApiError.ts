@@ -1,6 +1,6 @@
 import { ApiErrorInterface } from '@/types/ApiError';
 
-function ApiError(
+function ApiError<T>(
     status: number,
     success: boolean,
     message: string,
@@ -8,7 +8,7 @@ function ApiError(
     errors?: {
         [key: string]: string[];
     },
-    data?: any,
+    data?: T,
     stack?: string
 ): Response {
     const errorData: ApiErrorInterface = {

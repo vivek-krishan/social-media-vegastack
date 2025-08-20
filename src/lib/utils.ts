@@ -1,15 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Readable } from "stream";
+import { NextRequest } from "next/server";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function toNodeStream(req: Request) {
-  const readable = Readable.fromWeb(req.body as any);
-  (readable as any).headers = Object.fromEntries(req.headers.entries());
-  return readable;
+interface ReadableWithHeaders extends Readable {
+  headers: Record<string, string>;
+}
+
+export function toNodeStream(req: NextRequest): ReadableWithHeaders {
+  if (!req.body) {
+    throw new Error("Request body is null");
+  }
+
+  const readable = Readable.fromWeb(req.body as ReadableStream<Uint8Array>);
+  const readableWithHeaders = readable as ReadableWithHeaders;
+  readableWithHeaders.headers = Object.fromEntries(req.headers.entries());
+
+  return readableWithHeaders;
 }
 
 export function getWeeksSince(createdAt: string | Date): string {

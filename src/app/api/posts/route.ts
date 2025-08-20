@@ -5,11 +5,12 @@ import { getServerSession, User } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/option";
 import mongoose from "mongoose";
 import { UploadImages } from "@/helpers/imageKit";
-import formidable from "formidable";
+import formidable, { File as FormidableFile } from "formidable";
 import ApiResponse from "@/helpers/ApiResponse";
 import { NextRequest } from "next/server";
 import { toNodeStream } from "@/lib/utils";
 import UserModel, { IUser } from "@/models/user.model";
+import Stream from "stream";
 
 // Required for formidable in Next.js API routes
 export const config = {
@@ -35,21 +36,33 @@ export async function POST(req: NextRequest) {
   const userId = new mongoose.Types.ObjectId(sessionUser._id);
 
   try {
-    const nodeReq = toNodeStream(req); // ✅ convert Fetch Request -> Node stream
-
+    const nodeReq: NodeJS.ReadableStream = toNodeStream(req);
     const form = formidable({ multiples: false, keepExtensions: true });
 
-    const data: any = await new Promise((resolve, reject) => {
-      form.parse(nodeReq as any, (err, fields, files) => {
-        if (err) reject(err);
-        resolve({ fields, files });
-      });
+    // Define type for form data
+    interface FormData {
+      fields: Record<string, string>;
+      files: Record<string, FormidableFile[]>;
+    }
+
+    const data: FormData = await new Promise((resolve, reject) => {
+      form.parse(
+        nodeReq as NodeJS.ReadableStream,
+        (
+          err: Error | null,
+          fields: Record<string, string>,
+          files: Record<string, FormidableFile[]>
+        ) => {
+          if (err) reject(err);
+          resolve({ fields, files });
+        }
+      );
     });
 
     const { caption } = data.fields;
-    const file = data.files.image;
+    const file = data.files.image; // file: FormidableFile[]
 
-    console.log({ file: file[0], caption });
+    console.log({ file: file, caption });
 
     if (!file) return ApiError(400, false, "Image file is required");
     if (!caption) return ApiError(400, false, "Caption is required");
@@ -88,4 +101,3 @@ export async function POST(req: NextRequest) {
     return ApiError(500, false, "Internal server error");
   }
 }
-

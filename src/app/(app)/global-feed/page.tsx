@@ -41,6 +41,7 @@ const GlobalFeed = () => {
       <div className='max-w-xl mx-auto py-4'>
         {feedData?.map((post) => (
           <PostCard
+          key={post._id}
             user={{
               name: post.user?.name,
               image: "https://randomuser.me/api/portraits/men/36.jpg",

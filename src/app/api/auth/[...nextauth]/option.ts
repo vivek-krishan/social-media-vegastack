@@ -9,20 +9,22 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
+        identifier: {
           label: "Email",
           type: "text",
           placeholder: "jonsnow@example.com",
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any): Promise<any> {
+      async authorize(
+        credentials: Record<"identifier" | "password", string> | undefined
+      ): Promise<any> {
         await dbConnect();
 
         try {
           console.log("credentials", credentials);
           const user = await UserModel.findOne({
-            email: credentials.identifier,
+            email: credentials?.identifier,
           });
 
           if (!user) throw new Error("User not found!");
@@ -31,7 +33,7 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Your account is deactivated. You cannot sign in");
 
           const isPasswordCorrect = await bcrypt.compare(
-            credentials.password,
+            credentials?.password as string,
             user.password
           );
 
