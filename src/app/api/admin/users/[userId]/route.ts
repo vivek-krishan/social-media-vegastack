@@ -49,15 +49,8 @@ export async function GET(req: Request) {
 
 // Patch function for toggling the user active status(admin only)
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { userId: string } }
-) {
+export async function PATCH(req: NextRequest) {
   await dbConnect();
-
-  if (req) {
-    console.log(req.body);
-  }
 
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
@@ -74,7 +67,7 @@ export async function PATCH(
   }
 
   try {
-    const { userId } = params;
+    const { userId } = await req.json();
     if (!userId) {
       return ApiError(400, false, "User ID is required");
     }
