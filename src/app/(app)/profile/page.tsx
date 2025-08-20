@@ -30,7 +30,7 @@ const ProfilePage = () => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [hasFollowed, setHasFollowed] = useState<boolean>(false);
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     setLoader((prev) => ({ ...prev, fetingProfile: true }));
 
     try {
@@ -46,7 +46,7 @@ const ProfilePage = () => {
     } finally {
       setLoader((prev) => ({ ...prev, fetingProfile: false }));
     }
-  };
+  }, [userId]);
 
   const followToUser = useCallback(async () => {
     setLoader((prev) => ({ ...prev, toggleFollowing: true }));
@@ -71,7 +71,6 @@ const ProfilePage = () => {
 
   return !session?.user ? (
     <div className='w-screen h-screen flex justify-center items-center'>
-      {/* <img src='/screenLoading.svg' alt='' className='w-40' /> */}
       <Image src={"/screenLoading.svg"} alt='Loading...' className='w-40' />
     </div>
   ) : (

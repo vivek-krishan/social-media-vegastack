@@ -8,6 +8,11 @@ import ApiResponse from "@/helpers/ApiResponse";
 // Get route for fetching all users (admin only)
 export async function GET(req: Request) {
   await dbConnect();
+
+  if (req) {
+    console.log(req.body);
+  }
+
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return ApiError(402, false, "User is not logged in!");
