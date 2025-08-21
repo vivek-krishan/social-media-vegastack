@@ -6,6 +6,7 @@ import CommentItem from "./CommentItem";
 import { toast } from "sonner";
 import { ApiResponseInterface } from "@/types/ApiResponse";
 import Image from "next/image";
+import { IComment } from "@/models/comment.model";
 
 interface PostCardProps {
   user: {
@@ -21,7 +22,7 @@ interface PostCardProps {
     likes: number;
     isLiked?: boolean;
     comments: number;
-    allComments: [];
+    allComments: IComment[];
   };
   postId: string;
 }
@@ -94,7 +95,7 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
   };
 
   return (
-    <div className='bg-[#212228] rounded-lg mb-6'>
+    <div className='bg-[#212228] w-[45vw] h-fit rounded-lg mb-6'>
       <div className='p-4'>
         <div className='flex items-center justify-between mb-3'>
           <div className='flex items-center'>
@@ -116,11 +117,19 @@ const PostCard = ({ user, content, engagement, postId }: PostCardProps) => {
             </button>
           </div>
         </div>
-        <div className='mb-4'>
+        <div className='mb-4 w-full h-fit'>
           <p className='text-sm text-gray-200 mb-3'>{content.text}</p>
           {content.image && (
-            <div className='rounded-lg overflow-hidden'>
-              <Image src={content.image} alt='Post' className='w-full' />
+            <div className='rounded-lg overflow-hidden w-full h-fit'>
+              <Image
+                src={content.image}
+                width={0}
+                height={0}
+                alt='Post'
+                unoptimized
+                className='w-full'
+                loading='lazy'
+              />
             </div>
           )}
         </div>

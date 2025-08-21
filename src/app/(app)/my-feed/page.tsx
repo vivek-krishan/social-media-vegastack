@@ -15,14 +15,14 @@ const MyFeed = () => {
     commentLoading: false,
     likeLoading: false,
   });
-  
+
   console.log(loader);
-  const [feedData, setFeedData] = useState<IPost[]>([]);
+  const [feedData, setFeedData] = useState([]);
 
   const fetchFeed = async () => {
     setLoader((prev) => ({ ...prev, feedLoading: true }));
     try {
-      const feedResponse = await axios.get<IPost[]>("/api/feed/my-feed");
+      const feedResponse = await axios.get("/api/feed/my-feed");
       // Assuming feedResponse.data contains the feed data
       setFeedData(feedResponse.data.data.posts);
       toast.success("Login successful");
@@ -43,7 +43,7 @@ const MyFeed = () => {
         <PostCreate />
         {feedData.map((post) => (
           <PostCard
-          key={post._id}
+            key={post._id}
             user={{
               name: post.user?.name,
               image: "https://randomuser.me/api/portraits/men/36.jpg",

@@ -116,6 +116,9 @@ const PostCreate = () => {
                 />
                 <Image
                   src={preview}
+                  width={0}
+                  height={0}
+                  unoptimized
                   alt='Preview'
                   className='max-h-40 w-fit rounded-md border border-gray-700'
                 />

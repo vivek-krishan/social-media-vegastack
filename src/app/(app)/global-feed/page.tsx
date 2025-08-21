@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import PostCard from "@/components/post/PostCard";
-import { IPost } from "@/models/post.model";
 import axios from "axios";
 import { toast } from "sonner";
 import { getWeeksSince } from "@/lib/utils";
@@ -16,12 +15,12 @@ const GlobalFeed = () => {
   });
 
   console.log(loader);
-  const [feedData, setFeedData] = useState<IPost[]>([]);
+  const [feedData, setFeedData] = useState([]);
 
   const fetchFeed = async () => {
     setLoader((prev) => ({ ...prev, feedLoading: true }));
     try {
-      const feedResponse = await axios.get<IPost[]>("/api/feed/global-feed");
+      const feedResponse = await axios.get("/api/feed/global-feed");
       // Assuming feedResponse.data contains the feed data
       setFeedData(feedResponse.data.data.posts);
       toast.success("Login successful");
@@ -41,7 +40,7 @@ const GlobalFeed = () => {
       <div className='max-w-xl mx-auto py-4'>
         {feedData?.map((post) => (
           <PostCard
-          key={post._id}
+            key={post._id}
             user={{
               name: post.user?.name,
               image: "https://randomuser.me/api/portraits/men/36.jpg",

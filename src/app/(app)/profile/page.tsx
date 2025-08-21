@@ -34,10 +34,11 @@ const ProfilePage = () => {
     setLoader((prev) => ({ ...prev, fetingProfile: true }));
 
     try {
-      const user = await axios.get(`/api/user/${userId}`);
+      const user = await axios.get(`/api/user?userId=${userId}`);
       if (user.status !== 200) {
         toast.error("Failed to fetch profile data!");
       }
+      console.log(user);
       setUser(user.data?.data.user as IUser);
       setIsFollowing(user.data.data.following);
       setHasFollowed(user.data.data.follower);
@@ -71,7 +72,14 @@ const ProfilePage = () => {
 
   return !session?.user ? (
     <div className='w-screen h-screen flex justify-center items-center'>
-      <Image src={"/screenLoading.svg"} alt='Loading...' className='w-40' />
+      <Image
+        src={"/screenLoading.svg"}
+        width={0}
+        height={0}
+        unoptimized
+        alt='Loading...'
+        className='w-40'
+      />
     </div>
   ) : (
     <Layout>

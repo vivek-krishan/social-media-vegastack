@@ -17,6 +17,9 @@ const PostItem = ({ post }: PostItemProps) => {
         <Image
           src={post?.image?.url}
           alt={`Post ${post.id}`}
+          width={0}
+          height={0}
+          unoptimized
           className='w-full h-full object-cover'
         />
       </div>

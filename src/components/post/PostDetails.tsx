@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Image from "next/image";
+import { ApiResponseInterface } from "@/types/ApiResponse";
+import { getWeeksSince } from "@/lib/utils";
 
 interface PostDetailProps {
   post: IPost;
@@ -24,6 +26,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
     commenting: false,
   });
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [likes, setLikes] = useState<number>(post.likes.length);
   const [allComments, setAllComments] = useState<IComment[]>([]);
   const [postData, setPostData] = useState<IPost | null>(null);
 
@@ -63,10 +66,33 @@ const PostDetail = ({ post }: PostDetailProps) => {
     }
   };
 
+  const likePost = async () => {
+    setLoader((prev) => ({ ...prev, isLiking: true }));
+    setLikes((prev) => (hasLiked ? prev - 1 : prev + 1)); // Optimistic update
+    setHasLiked(!hasLiked);
+
+    try {
+      const response = await axios.patch<ApiResponseInterface>(
+        "/api/posts/like",
+        { postId: postData._id }
+      );
+
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error("Error in liking post:", error);
+      // Revert optimistic update on error
+      setLikes((prev) => (hasLiked ? prev + 1 : prev - 1));
+      setHasLiked((prev) => !prev);
+    } finally {
+      setLoader((prev) => ({ ...prev, isLiking: false }));
+    }
+  };
+
   const fetchPostDetails = useCallback(async () => {
     setLoader((prev) => ({ ...prev, fetchingPost: true }));
     try {
-      const postDetails = await axios.get(`/api/posts/${post._id}`);
+      const postDetails = await axios.get(`/api/posts?postId=${post._id}`);
+      // console.log({ postDetails });
       setPostData(postDetails.data.data.post as IPost);
       setHasLiked(postDetails.data.data.hasLiked);
       setAllComments(postDetails.data.data.post.comments);
@@ -81,22 +107,34 @@ const PostDetail = ({ post }: PostDetailProps) => {
     fetchPostDetails();
   }, [post, fetchPostDetails]);
 
-  return loader.fetchingPost ? (
+  return loader.fetchingPost === true || postData === null ? (
     <div>
-      <Image src='/screenLoading.svg' alt='' className='w-40' />
+      <Image
+        src='/screenLoading.svg'
+        width={0}
+        height={0}
+        unoptimized
+        alt=''
+        className='w-40'
+      />
     </div>
   ) : (
     <div className='max-w-4xl max-h-[80vh] mx-auto flex flex-col md:flex-row rounded-xl overflow-hidden bg-gray-900'>
       {/* Left side - Image */}
-      <div className='md:w-fit bg-black'>
+
+      {console.log(postData)}
+      <div className='md:w-fit w-fit h-fit bg-black'>
         <Image
-          src={postData?.image.url as string}
+          src={postData.image.url as string}
           alt={`Post by ${postData?.user?.name}`}
-          className='h-full object-cover'
+          width={0}
+          height={0}
+          unoptimized
+          className='w-full h-full object-cover'
         />
       </div>
       {/* Right side - Post details, comments, etc. */}
-      <div className='md:w-full flex flex-col h-full '>
+      <div className='md:w-full flex flex-col max-h-[80vh] overflow-scroll'>
         {/* Header - User info */}
         <div className='flex items-center justify-between p-4 border-b border-gray-800'>
           <div className='flex items-center'>
@@ -119,7 +157,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
               </p>
 
               <p className='text-gray-500 text-xs mt-1'>
-                {/* {getWeeksSince(postData?.createdAt as Date)} weeks */}
+                {getWeeksSince(postData.createdAt)} 
               </p>
             </div>
           </div>
@@ -135,15 +173,21 @@ const PostDetail = ({ post }: PostDetailProps) => {
           <div className='p-4'>
             <div className='flex justify-between mb-2'>
               <div className='flex space-x-4'>
-                <button className='hover:opacity-70 flex flex-col justify-center items-center'>
+                <button
+                  onClick={likePost}
+                  className='hover:opacity-70 flex flex-col justify-center items-center'
+                >
                   <Heart
                     size={24}
                     className={`${hasLiked ? "text-red-500 fill-red-500" : ""}`}
                   />
-                  <span>{postData?.likes.length}</span>
+                  <span className='text-xs text-gray-400'>{likes}</span>
                 </button>
-                <button className='hover:opacity-70'>
+                <button className='hover:opacity-70 flex flex-col justify-center items-center'>
                   <MessageCircle size={24} />
+                  <span className='text-xs text-gray-400'>
+                    {allComments.length}
+                  </span>
                 </button>
               </div>
             </div>
